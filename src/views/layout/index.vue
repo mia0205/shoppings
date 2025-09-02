@@ -25,14 +25,13 @@ export default {
 <style scoped lang="less">
 div{
   width: 100%;
-  height: 100vh;
   position: relative;
   padding-bottom: 50px;
   box-sizing: border-box;
 }
 .tab{
   width: 100%;
-  height: 350px;
+
   bottom:0;
   position: fixed;
   margin: 0;

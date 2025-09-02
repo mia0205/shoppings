@@ -1,5 +1,10 @@
 <template>
-  <div>search</div>
+  <div class="container">
+    <div>
+
+    </div>
+
+  </div>
 </template>
 
 <script>
