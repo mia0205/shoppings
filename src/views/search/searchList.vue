@@ -51,8 +51,13 @@ export default {
     }
   },
   async created () {
-    const res = await searchGoodsAPI(this.querySearch, this.page)
+    const res = await searchGoodsAPI({
+      categoryId: this.querySearch,
+      goodsName: this.$route.query.categoryId,
+      page: this.page
+    })
     this.searchArr = res.data.list.data
+    console.log('search', res)
   }
 }
 </script>

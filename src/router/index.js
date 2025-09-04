@@ -5,14 +5,16 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', redirect: '/home' },
+
   { path: '/login', component: () => import('@/views/login/index.vue') },
   {
     path: '/',
+    redirect: '/home',
     component: () => import('@/views/layout/index.vue'),
     children: [
       {
         path: 'home',
+
         component: () => import('@/views/layout/home/HomeIndex.vue')
       },
       {
@@ -29,11 +31,11 @@ const routes = [
       }
     ]
   },
-  { path: '/goods', component: () => import('@/views/goods/index.vue') },
+  { path: '/goods/:id', component: () => import('@/views/goods/index.vue') },
   { path: '/pay', component: () => import('@/views/pay/index.vue') },
   { path: '/search', component: () => import('@/views/search/index.vue') },
   // 动态路由传参
-  { path: '/searchlist/:id', component: () => import('@/views/search/searchList.vue') },
+  { path: '/searchlist', component: () => import('@/views/search/searchList.vue') },
   { path: '/myorder', component: () => import('@/views/pay/MyOrder.vue') }
 ]
 

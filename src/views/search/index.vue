@@ -17,7 +17,7 @@
       <span class="m2" @click="delFn">
         <van-icon name="delete-o"></van-icon>
       </span>
-      <ul v-for="(item,index) in searchArr" :key=index @click="searchFn(goods)">
+      <ul v-for="(item,index) in searchArr" :key=index @click="searchFn(item)">
         <li>{{ item }}</li>
 
       </ul>
@@ -39,16 +39,15 @@ export default {
   },
   methods: {
     searchFn (key) {
-      const categoryId = 1
       const ind = this.searchArr.indexOf(key)
       if (ind !== -1) {
         this.searchArr.splice(ind, 1)
       }
-      this.searchArr.unshift(this.goods)
+      this.searchArr.unshift(key)
 
       setSearchInfo(this.searchArr)
       // 携带查询参数
-      this.$router.push(`/searchlist/${categoryId}?search=${key}`)
+      this.$router.push(`/searchlist?search=${key}`)
     },
     delFn () {
       this.searchArr = []
