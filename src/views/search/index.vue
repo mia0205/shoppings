@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <span class="he">
+      <span class="he" @click="$router.push('/home')">
         <van-icon name="revoke" />
       </span>
       <h2>商品搜索</h2>
@@ -14,10 +14,10 @@
     </div>
     <div class="main" v-if="searchArr.length > 0">
       <span class="m1">最近搜索</span>
-      <span class="m2" @click="searchFn(goods)">
+      <span class="m2" @click="delFn">
         <van-icon name="delete-o"></van-icon>
       </span>
-      <ul v-for="(item,index) in searchArr" :key=index>
+      <ul v-for="(item,index) in searchArr" :key=index @click="searchFn(goods)">
         <li>{{ item }}</li>
 
       </ul>
@@ -27,27 +27,32 @@
 </template>
 
 <script>
+import { getSearchInfo, setSearchInfo } from '@/utils/storage'
 export default {
   name: 'search-index',
   data () {
     return {
-      searchArr: [],
+      searchArr: getSearchInfo(),
       goods: ''
 
     }
   },
   methods: {
     searchFn (key) {
+      const categoryId = 1
       const ind = this.searchArr.indexOf(key)
       if (ind !== -1) {
         this.searchArr.splice(ind, 1)
-        this.searchArr.unshift(key)
-      } else {
-        this.searchArr.unshift(this.goods)
       }
+      this.searchArr.unshift(this.goods)
+
+      setSearchInfo(this.searchArr)
+      // 携带查询参数
+      this.$router.push(`/searchlist/${categoryId}?search=${key}`)
     },
     delFn () {
       this.searchArr = []
+      setSearchInfo([])
     }
   }
 }
