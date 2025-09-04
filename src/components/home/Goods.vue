@@ -1,5 +1,5 @@
 <template>
-  <div class="goods">
+  <div class="goods"  @click="$router.push(`/goods/${item.goods_id}`)">
     <div class="left">
       <img :src="item.goods_image" alt="">
     </div>
@@ -26,7 +26,12 @@ export default {
     }
   },
   props: {
-    item: Object
+    item: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
 
   }
 }
