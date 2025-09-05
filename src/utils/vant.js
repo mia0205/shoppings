@@ -1,4 +1,4 @@
-import { Button, Tabbar, TabbarItem, Icon, Form, Field, NavBar, Toast, Swipe, SwipeItem, Search, Grid, GridItem, Rate, ActionSheet } from 'vant'
+import { Button, Tabbar, TabbarItem, Icon, Form, Field, NavBar, Toast, Swipe, SwipeItem, Search, Grid, GridItem, Rate, ActionSheet, Dialog } from 'vant'
 import Vue from 'vue'
 
 Vue.config.productionTip = false
@@ -18,3 +18,4 @@ Vue.use(TabbarItem)
 Vue.use(Grid)
 Vue.use(GridItem)
 Vue.use(ActionSheet)
+Vue.use(Dialog)

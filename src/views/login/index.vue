@@ -13,7 +13,7 @@
     <div class="content">
       <van-form @submit="onSubmit" class="content1">
       <van-field
-        v-model="form.mobile"
+        v-model="mobile"
         name="手机号"
         label="手机号"
         placeholder="手机号"
@@ -21,17 +21,17 @@
         :rules="[{ required: true, message: '请填写手机号' }]"
       />
       <van-field
-       v-model="num"
+       v-model="captchaCode"
        type="passma"
        name="验证码"
        label="验证码"
        placeholder="图行验证码"
        :rules="[{ required: true, message: '请输入图行验证码' }]"
       />
-      <img :src="base" alt="" @click="changeImgFn">
+      <img  :src="base" alt="" @click="changeImgFn">
       <div class="textword">
         <van-field
-       v-model="form.captchaCode"
+       v-model="smsCode"
        type="textword"
        name="短信验证码"
        label="短信验证码"
@@ -57,20 +57,16 @@ export default {
   name: 'login-index',
   data () {
     return {
-      num: '',
       base: '',
       textword: '',
       totalSecond: 60,
       second: 60, // 当前秒数
       timer: null,
-      suscode: '246810',
-
-      form: {
-        captchaKey: '',
-        captchaCode: '',
-        mobile: ''
-
-      }
+      smsCode: '',
+      captchaKey: '',
+      captchaCode: '',
+      mobile: '',
+      obj: {}
 
     }
   },
@@ -81,7 +77,7 @@ export default {
     async changeImgFn () {
       const res = await request.get('/captcha/image')
 
-      this.form.captchaKey = res.data.key
+      this.captchaKey = res.data.key
       this.base = res.data.base64
     },
     async getTextFn () {
@@ -101,22 +97,22 @@ export default {
           }, 1000)
         }
 
-        const res = await getTextAPI(this.form)
+        const res = await getTextAPI(this.captchaCode, this.captchaKey, this.mobile)
         if (res.status === 200) {
           this.$toast('发送成功')
         } else {
           this.$toast('发送失败')
         }
-        console.log(res)
+        console.log('短信验证码', res)
       }
     },
     // 校验方法
     validFn () {
-      if (!/^1[3-9]\d{9}$/.test(this.form.mobile)) {
+      if (!/^1[3-9]\d{9}$/.test(this.mobile)) {
         this.$toast('请输入正确的手机号')
         return false
       }
-      if (!/^\w{4}$/.test(this.num)) {
+      if (!/^\w{4}$/.test(this.captchaCode)) {
         this.$toast('请输入正确的图形验证码')
         return false
       }
@@ -128,12 +124,19 @@ export default {
       if (!this.validFn()) {
         return
       }
-      if (!/^\d{6}$/.test(this.form.captchaCode)) {
+      if (!/^\d{6}$/.test(this.smsCode)) {
         return
       }
-      const res = await submitAPI(this.suscode, this.form.captchaCode)
-      console.log(res)
-      this.$router.push('/')
+      const res = await submitAPI(this.mobile, this.smsCode)
+      console.log('手机验证码', res)
+      this.obj = res.data
+      if (res.status !== 200) {
+        this.$toast('登录失败')
+        return
+      }
+      this.$store.commit('user/setInfo', this.obj)
+      this.$toast(res.message)
+      this.$router.push('/home')
     }
 
   },

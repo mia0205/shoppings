@@ -73,66 +73,75 @@
     <div class="footer">
       <div @click="$router.push('/')" class="icon-home">
         <van-icon name="wap-home-o" />
-        <span>首页</span>
+        <span class="page">首页</span>
       </div>
       <div @click="$router.push('/cart')" class="icon-cart">
         <span  class="num"></span>
         <van-icon name="shopping-cart-o" />
-        <span>购物车</span>
+        <span class="page">购物车</span>
       </div>
       <div class="btn-add" @click="addCartFn">加入购物车</div>
       <div class="btn-buy" @click="buyNow">立刻购买</div>
     </div>
 
     <!-- 加入购物车/立即购买 公用的弹层 -->
-    <van-action-sheet>
+    <van-action-sheet v-model="show" :title="flag === 0 ? '加入购物车':'立即购买'">
       <div class="product">
         <div class="product-title">
           <div class="left">
-            <img src="" alt="">
+            <img :src="detail.goods_image" alt="">
           </div>
           <div class="right">
             <div class="price">
-              <span>¥</span>
+              <span>¥ {{detail.goods_price_max}}</span>
               <span class="nowprice"></span>
             </div>
             <div class="count">
               <span>库存</span>
-              <span></span>
+              <span>{{ detail.stock_total }}</span>
             </div>
           </div>
         </div>
         <div class="num-box">
           <span>数量</span>
           <!-- v-model 本质上 :value 和 @input 的简写 -->
+           <CountBox v-model="num"></CountBox>
 
         </div>
 
         <!-- 有库存才显示提交按钮 -->
-        <div class="showbtn">
-          <div class="btn">加入购物车</div>
-          <div class="btn now" >立刻购买</div>
+        <div class="showbtn" v-if="detail.stock_total >0">
+          <div class="btn" v-if="flag===0" @click="addCartShopFn">加入购物车
+          </div>
+          <div class="btn now" v-else>立刻购买</div>
         </div>
-
-        <div class="btn-none" >该商品已抢完</div>
+        <div class="btn-none" v-else>该商品已抢完</div>
       </div>
     </van-action-sheet>
   </div>
 </template>
 
 <script>
+import { addCartAPI } from '@/api/cart'
 import { getGoodsDetailsAPI, getGoodsReviewAPI } from '@/api/goods'
+import CountBox from '@/components/CountBox.vue'
 
 export default {
   name: 'goods-index',
-
+  components: {
+    CountBox
+  },
   data () {
     return {
       current: 0,
       detail: {},
       images: [],
       reviewArr: [],
-      total: ''
+      total: '',
+      show: false,
+      flag: 0,
+      num: 1,
+      skuList: []
 
     }
   },
@@ -142,8 +151,10 @@ export default {
     },
     async getDetail () {
       const res = await getGoodsDetailsAPI(this.goodsId)
+      console.log('detail', res)
       this.detail = res.data.detail
       this.images = res.data.detail.goods_images
+      this.skuList = res.data.detail.skuList
     },
     async getGoodsReview () {
       const res = await getGoodsReviewAPI(this.goodsId, 3)
@@ -152,10 +163,16 @@ export default {
       this.total = res.data.total
     },
     addCartFn () {
-
+      this.flag = 0
+      this.show = true
     },
     buyNow () {
-
+      this.flag = 1
+      this.show = true
+    },
+    async  addCartShopFn () {
+      const res = await addCartAPI(this.detail.goods_id, this.num, this.skuList[0].goods_sku_id)
+      console.log(res)
     }
 
   },
@@ -384,5 +401,8 @@ export default {
     background-color: #ee0a24;
     border-radius: 50%;
   }
+}
+.page{
+  font-size:10px;
 }
 </style>

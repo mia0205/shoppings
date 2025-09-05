@@ -1,28 +1,30 @@
 import request from '@/utils/request'
 
 // 获取短信验证码
-export const getTextAPI = ({ captchaCode, captchaKey, mobile }) => {
-  return request({
-    url: '/captcha/sendSmsCaptcha',
-    method: 'POST',
-    data: {
+export const getTextAPI = (captchaCode, captchaKey, mobile) => {
+  return request.post('/captcha/sendSmsCaptcha', {
+    form: {
       captchaCode,
       captchaKey,
       mobile
+    },
+    headers: {
+      platform: 'H5'
     }
   })
 }
 
 // 登录接口
 export const submitAPI = (mobile, smsCode) => {
-  return request({
-    url: '/passport/login',
-    method: 'POST',
-    data: {
+  return request.post('/passport/login', {
+    form: {
       isParty: false,
-      mobile,
       partyData: {},
+      mobile,
       smsCode
+    },
+    headers: {
+      platform: 'H5'
     }
   })
 }
