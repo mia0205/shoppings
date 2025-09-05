@@ -111,7 +111,8 @@
 
         <!-- 有库存才显示提交按钮 -->
         <div class="showbtn" v-if="detail.stock_total >0">
-          <div class="btn" v-if="flag===0">加入购物车</div>
+          <div class="btn" v-if="flag===0" @click="addCartShopFn">加入购物车
+          </div>
           <div class="btn now" v-else>立刻购买</div>
         </div>
         <div class="btn-none" v-else>该商品已抢完</div>
@@ -121,6 +122,7 @@
 </template>
 
 <script>
+import { addCartAPI } from '@/api/cart'
 import { getGoodsDetailsAPI, getGoodsReviewAPI } from '@/api/goods'
 import CountBox from '@/components/CountBox.vue'
 
@@ -138,7 +140,8 @@ export default {
       total: '',
       show: false,
       flag: 0,
-      num: 5
+      num: 1,
+      skuList: []
 
     }
   },
@@ -148,8 +151,10 @@ export default {
     },
     async getDetail () {
       const res = await getGoodsDetailsAPI(this.goodsId)
+      console.log('detail', res)
       this.detail = res.data.detail
       this.images = res.data.detail.goods_images
+      this.skuList = res.data.detail.skuList
     },
     async getGoodsReview () {
       const res = await getGoodsReviewAPI(this.goodsId, 3)
@@ -164,6 +169,10 @@ export default {
     buyNow () {
       this.flag = 1
       this.show = true
+    },
+    async  addCartShopFn () {
+      const res = await addCartAPI(this.detail.goods_id, this.num, this.skuList[0].goods_sku_id)
+      console.log(res)
     }
 
   },
