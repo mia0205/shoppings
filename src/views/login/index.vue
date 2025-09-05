@@ -65,8 +65,7 @@ export default {
       smsCode: '',
       captchaKey: '',
       captchaCode: '',
-      mobile: '',
-      obj: {}
+      mobile: ''
 
     }
   },
@@ -129,12 +128,12 @@ export default {
       }
       const res = await submitAPI(this.mobile, this.smsCode)
       console.log('手机验证码', res)
-      this.obj = res.data
+
       if (res.status !== 200) {
         this.$toast('登录失败')
         return
       }
-      this.$store.commit('user/setInfo', this.obj)
+      this.$store.commit('user/setInfo', res.data)
       this.$toast(res.message)
       this.$router.push('/home')
     }

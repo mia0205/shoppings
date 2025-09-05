@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 
 const myAxios = axios.create({
   baseURL: 'http://smart-shop.itheima.net/index.php?s=/api'
@@ -7,6 +8,12 @@ const myAxios = axios.create({
 // 请求拦截器
 myAxios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
+  const token = store.getters.token
+  if (token) {
+    config.headers['Access-Token'] = token
+    config.headers.platform = 'H5'
+  }
+
   return config
 }, function (error) {
   // 对请求错误做些什么
