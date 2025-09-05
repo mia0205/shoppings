@@ -76,7 +76,7 @@
         <span class="page">首页</span>
       </div>
       <div @click="$router.push('/cart')" class="icon-cart">
-        <span  class="num"></span>
+        <span class="num" v-if="cartTotal>0">{{ cartTotal }}</span>
         <van-icon name="shopping-cart-o" />
         <span class="page">购物车</span>
       </div>
@@ -141,7 +141,8 @@ export default {
       show: false,
       flag: 0,
       num: 1,
-      skuList: []
+      skuList: [],
+      cartTotal: 0
 
     }
   },
@@ -151,14 +152,12 @@ export default {
     },
     async getDetail () {
       const res = await getGoodsDetailsAPI(this.goodsId)
-      console.log('detail', res)
       this.detail = res.data.detail
       this.images = res.data.detail.goods_images
       this.skuList = res.data.detail.skuList
     },
     async getGoodsReview () {
       const res = await getGoodsReviewAPI(this.goodsId, 3)
-      console.log(res)
       this.reviewArr = res.data.list
       this.total = res.data.total
     },
@@ -172,7 +171,9 @@ export default {
     },
     async  addCartShopFn () {
       const res = await addCartAPI(this.detail.goods_id, this.num, this.skuList[0].goods_sku_id)
-      console.log(res)
+      this.cartTotal = res.data.cartTotal
+      this.$toast(res.message)
+      this.show = false
     }
 
   },
