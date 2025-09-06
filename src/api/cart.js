@@ -11,3 +11,10 @@ export const addCartAPI = (goodsId, goodsNum, goodsSkuId) => {
     }
   })
 }
+// 获取购物车列表
+export const getCartListAPI = () => {
+  return request({
+    url: '/cart/list'
+
+  })
+}
