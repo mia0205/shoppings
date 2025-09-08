@@ -1,4 +1,5 @@
-import { getCartListAPI } from '@/api/cart'
+import { clearCartListAPI, getCartListAPI, updateCartListAPI } from '@/api/cart'
+import { Toast } from 'vant'
 
 export default {
   namespaced: true,
@@ -18,6 +19,10 @@ export default {
     },
     reversCheck (state, ck) {
       state.cartlist.forEach(item => { item.isChecked = ck })
+    },
+    changeCount (state, { goodsId, goodsNum }) {
+      const goods = state.cartlist.find(item => item.goods_id === goodsId)
+      goods.goods_num = goodsNum
     }
 
   },
@@ -52,6 +57,21 @@ export default {
         item.isChecked = true
       })
       context.commit('updateCart', res.data.list)
+    },
+    async updateCountBox (context, obj) {
+      const { goodsNum, goodsId, goodsSkuId } = obj
+      // 在本地修改
+      context.commit('changeCount', { goodsId, goodsNum })
+      const res = await updateCartListAPI(goodsId, goodsNum, goodsSkuId)
+      console.log(res)
+    },
+    async deleteFn (context) {
+      const selCartList = context.getters.selCartList
+      const cartIds = selCartList.map(item => item.id)
+      const res = await clearCartListAPI(cartIds)
+      console.log('删除', res)
+      Toast('删除成功')
+      context.dispatch('getCartAction')
     }
   }
 

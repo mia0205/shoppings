@@ -33,6 +33,8 @@ export default {
     },
     handleChange (e) {
       console.log(e.target)
+      const num = +e.target.value
+      this.$emit('input', num)
     }
   }
 

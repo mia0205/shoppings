@@ -18,3 +18,26 @@ export const getCartListAPI = () => {
 
   })
 }
+// 购物车商品更新
+export const updateCartListAPI = (goodsId, goodsNum, goodsSkuId) => {
+  return request({
+    url: '/cart/update',
+    method: 'POST',
+    data: {
+      goodsId,
+      goodsNum,
+      goodsSkuId
+    }
+
+  })
+}
+// 删除购物车商品
+export const clearCartListAPI = (cartIds) => {
+  return request({
+    url: '/cart/clear',
+    method: 'POST',
+    data: {
+      cartIds
+    }
+  })
+}
