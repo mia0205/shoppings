@@ -35,7 +35,7 @@
         <span class="price">合计:￥{{ cartSum }}</span>
 
       <van-button class="sum" color="orange" v-if="flag" @click="deleteFn">删除</van-button>
-      <van-button color="orange" class="sun" v-else>结算({{ cartNum }})</van-button>
+      <van-button color="orange" class="sun" v-else @click="goPay">结算({{ cartNum }})</van-button>
       </div>
     </div>
     </div>
@@ -88,6 +88,19 @@ export default {
         return false
       }
       this.$store.dispatch('cart/deleteFn')
+    },
+    goPay () {
+      // 判断是否选中
+      if (this.cartNum > 0) {
+        // 有选中的，进行跳转
+        this.$router.push({
+          path: '/pay',
+          query: {
+            mode: 'cart',
+            cartIds: this.selCartList.map(item => item.id).join(',')
+          }
+        })
+      }
     }
 
   },
@@ -102,7 +115,7 @@ export default {
       console.log('购物车数量', list)
       return list
     },
-    ...mapGetters('cart', ['cartTotal', 'cartNum', 'cartSum', 'isAllChecked']),
+    ...mapGetters('cart', ['cartTotal', 'cartNum', 'cartSum', 'isAllChecked', 'selCartList']),
     isLogin () {
       return this.$store.getters.token
     }

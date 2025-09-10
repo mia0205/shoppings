@@ -1,7 +1,5 @@
 <template>
-  <div>
-    myoredr
-  </div>
+  <div>myorder</div>
 </template>
 
 <script>
@@ -10,4 +8,4 @@ export default {
 }
 </script>
 
-<style scoped lang="less"></style>
+<style lang="less" scoped></style>
