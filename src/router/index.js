@@ -36,7 +36,7 @@ const routes = [
   { path: '/search', component: () => import('@/views/search/index.vue') },
   // 动态路由传参
   { path: '/searchlist', component: () => import('@/views/search/searchList.vue') },
-  { path: '/myorder', component: () => import('@/views/pay/MyOrder.vue') }
+  { path: '/myorder', component: () => import('@/views/myorder/MyOrder.vue') }
 ]
 
 const router = new VueRouter({

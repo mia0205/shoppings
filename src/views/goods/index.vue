@@ -113,7 +113,7 @@
         <div class="showbtn" v-if="detail.stock_total >0">
           <div class="btn" v-if="flag===0" @click="addCartShopFn">加入购物车
           </div>
-          <div class="btn now" v-else>立刻购买</div>
+          <div class="btn now" v-else @click="goBuyNow">立刻购买</div>
         </div>
         <div class="btn-none" v-else>该商品已抢完</div>
       </div>
@@ -174,6 +174,18 @@ export default {
       this.cartTotal = res.data.cartTotal
       this.$toast(res.message)
       this.show = false
+    },
+    goBuyNow () {
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'buyNow',
+          goodsId: this.detail.goods_id,
+          goodsSkuId: this.skuList[0].goods_sku_id,
+          goodsNum: this.num
+
+        }
+      })
     }
 
   },
