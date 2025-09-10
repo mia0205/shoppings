@@ -15,6 +15,13 @@ export default {
 
   },
   actions: {
+    logout (context) {
+      // user信息重置
+      context.commit('setInfo', {})
+
+      // 购物车信息重置,狂模块调用
+      context.commit('cart/updateCart', [], { root: true })
+    }
 
   },
   getters: {
